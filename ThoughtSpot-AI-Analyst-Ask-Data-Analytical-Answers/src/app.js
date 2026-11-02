@@ -59,6 +59,7 @@ function ask(question){const q=String(question||"").trim();if(!q)return;let inte
 function refreshMeta(){ $("dataset-title").textContent=datasetName;$("dataset-status").textContent=rows.length.toLocaleString()+" rows · local";$("data-badge").textContent=datasetName; }
 function resetConversation(){$("messages").innerHTML="";history=[];lastResult=null;$("welcome").hidden=false;$("hint").textContent="Supported: revenue, profit, orders, quantity, region, product, category, channel, monthly, yearly and why changes."}
 $("question-form").addEventListener("submit",e=>{e.preventDefault();ask($("question").value)});
+document.addEventListener("keydown",e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();$("question").focus();}if(e.key==="Escape")$("saved-panel").hidden=true});
 $("question").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();ask($("question").value)}});
 document.querySelectorAll("[data-example]").forEach(btn=>btn.addEventListener("click",()=>ask(btn.dataset.example)));
 $("new-chat").addEventListener("click",resetConversation);
