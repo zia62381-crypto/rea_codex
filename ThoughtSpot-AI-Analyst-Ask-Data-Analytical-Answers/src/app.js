@@ -67,5 +67,5 @@ $("file").addEventListener("change",async e=>{const f=e.target.files[0];if(!f)re
 $("demo-reset").onclick=()=>{rows=demoData();datasetName="Retail Sales · Demo";resetConversation();refreshMeta();showToast("Demo dataset restored")};
 $("download-data").onclick=()=>download("retail-demo-data.csv",toCSV());
 $("saved-toggle").onclick=()=>{const saved=JSON.parse(localStorage.getItem("insightlab-saved")||"[]");const panel=$("saved-panel");panel.hidden=!panel.hidden;panel.innerHTML='<h3>Saved answers</h3>'+(saved.length?saved.map(x=>'<div class="saved-item"><strong>'+escape(x.title)+'</strong><p>'+escape(x.question)+'</p><small>'+escape(x.at.slice(0,10))+'</small></div>').join(""):'<p class="muted">No answers saved yet.</p>')};
-$("close-saved").onclick=()=>$("saved-panel").hidden=true;
+
 refreshMeta();
