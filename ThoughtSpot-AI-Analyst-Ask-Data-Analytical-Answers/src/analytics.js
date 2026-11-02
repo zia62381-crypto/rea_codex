@@ -71,12 +71,12 @@ export function interpret(question){
  const values={region:["West","East","South","Central"],category:["Electronics","Furniture","Office Supplies","Apparel"],product:["Headphones","Webcam","Laptop Stand","Desk Chair","Bookshelf","Standing Desk","Notebook","Printer Paper","Organizer","Sneakers","Jacket","T-shirt"],channel:["Organic Search","Paid Search","Social Ads","Email"]};
  for(const [d,choices] of Object.entries(values)){const found=choices.find(v=>q.includes(norm(v)));if(found)filter[d]=found}
  if(any(q,["last year","سال گذشته","پارسال"]))filter.year=new Date().getUTCFullYear()-1;
- return {metric,dimension,top:top?Math.min(20,Number(top[1])):null,why:any(q,["why","چرا","reason","علت"]),filter,q};
+ const recognized=any(q,["revenue","sales","profit","order","quantity","units","فروش","درآمد","سود","سفارش","region","category","product","channel","month","year","trend","منطقه","دسته","محصول","کانال","ماه","روند"]);return {metric,dimension,top:top?Math.min(20,Number(top[1])):null,why:any(q,["why","چرا","reason","علت"]),filter,q,recognized};
 }
 const sum=(rows,metric)=>rows.reduce((n,r)=>n+(Number(r[metric])||0),0);
 export function analyze(rows,question){
  if(!String(question??"").trim())return{error:"Please enter a question."};
- const query=interpret(question),selected=rows.filter(r=>Object.entries(query.filter).every(([key,v])=>key==="year"?r.date.startsWith(String(v)):r[key]===v));
+ const query=interpret(question);if(!query.recognized)return{error:"Unsupported question. Ask about revenue, profit, orders or units by a category, region, product, channel, month or year."};const selected=rows.filter(r=>Object.entries(query.filter).every(([key,v])=>key==="year"?r.date.startsWith(String(v)):r[key]===v));
  if(!selected.length)return{error:"No matching rows. Try a different filter or question."};
  const {metric,dimension}=query;if(metric==="profit"&&!selected.some(r=>r.profit!==null))return{error:"No profit field. Upload a CSV with a profit column."};
  const total=sum(selected,metric),label=metricNames[metric],data=new Map(),dateMin=selected.map(r=>r.date).sort()[0],dateMax=selected.map(r=>r.date).sort().at(-1);
