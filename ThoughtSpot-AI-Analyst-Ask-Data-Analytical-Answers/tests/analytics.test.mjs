@@ -56,3 +56,8 @@ test("export output contains proper labels",()=>{
  const csv=resultCSV([{name:'A "special"',value:100}]);
  assert.match(csv,/""special""/);
 });
+
+test("unrelated natural language is rejected instead of fabricated",()=>{
+ const result=analyze(rows,"What is the weather tomorrow?");
+ assert.match(result.error,/unsupported/i);
+});
